@@ -1,0 +1,112 @@
+# ============================================================
+# CI — Build & Validate
+# ============================================================
+# Runs on every pull request and push to main.
+# Validates Docker Compose config and builds all core service
+# images to catch build regressions early.
+# ============================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Validate Docker Compose configuration ──────────────────
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy example env file
+        run: cp .env.example .env
+
+      - name: Validate Docker Compose config
+        run: docker compose --profile core --profile hunting --profile advanced --profile ai config --quiet
+
+  # ── Build core service images ──────────────────────────────
+  build-images:
+    runs-on: ubuntu-latest
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - { name: frontend,             context: ./frontend }
+          - { name: backend,              context: ./backend }
+          - { name: orchestrator,         context: ./orchestrator }
+          - { name: notification-service, context: ./notification-service }
+          - { name: ai-assistant,         context: ./ai-assistant }
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ${{ matrix.service.name }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.service.context }}
+          push: false
+          tags: expl0v1n/${{ matrix.service.name }}:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Build VAPT tool images ────────────────────────────────
+  build-tools:
+    runs-on: ubuntu-latest
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - nmap
+          - nuclei
+          - nikto
+          - sqlmap
+          - subfinder
+          - amass
+          - httpx
+          - katana
+          - gowitness
+          - assetfinder
+          - massdns
+          - masscan
+          - ffuf
+          - feroxbuster
+          - kiterunner
+          - arjun
+          - trufflehog
+          - linkfinder
+          - subjack
+          - cloud-enum
+          - interactsh
+          - theharvester
+          - asnmap
+          - puredns
+          - altdns-dnsgen
+          - jsluice
+          - metasploit
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ${{ matrix.tool }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ./tools/${{ matrix.tool }}
+          push: false
+          tags: expl0v1n/tool-${{ matrix.tool }}:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

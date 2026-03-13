@@ -1,0 +1,134 @@
+# ============================================================
+# Expl0V1N Framework — Docker Compose Production Override
+# ============================================================
+# Uses pre-built images from GitHub Container Registry (GHCR)
+# instead of building from source.
+#
+# Usage:
+#   # Set your GHCR image owner (GitHub username or org, lowercase):
+#   export IMAGE_OWNER=lysophavin18
+#   export IMAGE_TAG=latest       # or a specific commit SHA
+#
+#   # Pull pre-built images and start core services:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+#     --profile core pull
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+#     --profile core up -d --no-build
+#
+#   # Start all profiles:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+#     --profile core --profile hunting --profile advanced --profile ai pull
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+#     --profile core --profile hunting --profile advanced --profile ai up -d --no-build
+# ============================================================
+
+services:
+  # ── Application Services ───────────────────────────────────
+
+  frontend:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-frontend:${IMAGE_TAG:-latest}
+
+  backend:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-backend:${IMAGE_TAG:-latest}
+
+  orchestrator:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-orchestrator:${IMAGE_TAG:-latest}
+
+  celery-worker:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-orchestrator:${IMAGE_TAG:-latest}
+
+  celery-beat:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-orchestrator:${IMAGE_TAG:-latest}
+
+  notification-service:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-notification-service:${IMAGE_TAG:-latest}
+
+  ai-assistant:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-ai-assistant:${IMAGE_TAG:-latest}
+
+  # ── VAPT Tools ─────────────────────────────────────────────
+
+  nmap:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-nmap:${IMAGE_TAG:-latest}
+
+  nuclei:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-nuclei:${IMAGE_TAG:-latest}
+
+  nikto:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-nikto:${IMAGE_TAG:-latest}
+
+  sqlmap:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-sqlmap:${IMAGE_TAG:-latest}
+
+  metasploit:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-metasploit:${IMAGE_TAG:-latest}
+
+  # ── Bug Hunting Tools ──────────────────────────────────────
+
+  subfinder:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-subfinder:${IMAGE_TAG:-latest}
+
+  amass:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-amass:${IMAGE_TAG:-latest}
+
+  httpx:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-httpx:${IMAGE_TAG:-latest}
+
+  katana:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-katana:${IMAGE_TAG:-latest}
+
+  gowitness:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-gowitness:${IMAGE_TAG:-latest}
+
+  assetfinder:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-assetfinder:${IMAGE_TAG:-latest}
+
+  # ── Advanced Hunting Tools ─────────────────────────────────
+
+  massdns:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-massdns:${IMAGE_TAG:-latest}
+
+  masscan:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-masscan:${IMAGE_TAG:-latest}
+
+  ffuf:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-ffuf:${IMAGE_TAG:-latest}
+
+  feroxbuster:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-feroxbuster:${IMAGE_TAG:-latest}
+
+  kiterunner:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-kiterunner:${IMAGE_TAG:-latest}
+
+  arjun:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-arjun:${IMAGE_TAG:-latest}
+
+  trufflehog:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-trufflehog:${IMAGE_TAG:-latest}
+
+  linkfinder:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-linkfinder:${IMAGE_TAG:-latest}
+
+  subjack:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-subjack:${IMAGE_TAG:-latest}
+
+  cloud-enum:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-cloud-enum:${IMAGE_TAG:-latest}
+
+  interactsh:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-interactsh:${IMAGE_TAG:-latest}
+
+  theharvester:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-theharvester:${IMAGE_TAG:-latest}
+
+  asnmap:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-asnmap:${IMAGE_TAG:-latest}
+
+  puredns:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-puredns:${IMAGE_TAG:-latest}
+
+  altdns-dnsgen:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-altdns-dnsgen:${IMAGE_TAG:-latest}
+
+  jsluice:
+    image: ghcr.io/${IMAGE_OWNER:-lysophavin18}/expl0v1n-tool-jsluice:${IMAGE_TAG:-latest}
