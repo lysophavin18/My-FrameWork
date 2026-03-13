@@ -1,9 +1,11 @@
-FROM golang:1.22-alpine AS build
-RUN apk add --no-cache git
-RUN go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
-
 FROM alpine:3.20
-RUN apk add --no-cache ca-certificates
-COPY --from=build /go/bin/nuclei /usr/local/bin/nuclei
+ARG NUCLEI_VERSION=v3.4.10
+RUN apk add --no-cache ca-certificates curl tar && \
+	curl -fsSL "https://github.com/projectdiscovery/nuclei/releases/download/${NUCLEI_VERSION}/nuclei_${NUCLEI_VERSION#v}_linux_amd64.zip" -o /tmp/nuclei.zip && \
+	apk add --no-cache unzip && \
+	unzip /tmp/nuclei.zip -d /tmp && \
+	mv /tmp/nuclei /usr/local/bin/nuclei && \
+	chmod +x /usr/local/bin/nuclei && \
+	rm -rf /tmp/nuclei.zip /tmp/LICENSE.md /tmp/README.md
 CMD ["sleep", "infinity"]
 
