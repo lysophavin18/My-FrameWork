@@ -74,17 +74,18 @@ API (direct): http://127.0.0.1:8000/api/v1
 
 ## Wiki
 
-- Home: wiki/Home.md
-- Platform Overview: wiki/Platform-Overview.md
-- Deployment Guide: wiki/Deployment-Guide.md
-- VAPT Mode: wiki/VAPT-Mode.md
-- Bug Hunting Mode: wiki/Bug-Hunting-Mode.md
-- Advanced Methods: wiki/Advanced-Methods.md
-- AI Assistant: wiki/AI-Assistant.md
-- Security Model: wiki/Security-Model.md
-- Operations Runbook: wiki/Operations-Runbook.md
-- Troubleshooting: wiki/Troubleshooting.md
-- API Cookbook: wiki/API-Cookbook.md
+- Open Wiki: https://github.com/lysophavin18/My-FrameWork/wiki
+- Home: https://github.com/lysophavin18/My-FrameWork/wiki/Home
+- Platform Overview: https://github.com/lysophavin18/My-FrameWork/wiki/Platform-Overview
+- Deployment Guide: https://github.com/lysophavin18/My-FrameWork/wiki/Deployment-Guide
+- VAPT Mode: https://github.com/lysophavin18/My-FrameWork/wiki/VAPT-Mode
+- Bug Hunting Mode: https://github.com/lysophavin18/My-FrameWork/wiki/Bug-Hunting-Mode
+- Advanced Methods: https://github.com/lysophavin18/My-FrameWork/wiki/Advanced-Methods
+- AI Assistant: https://github.com/lysophavin18/My-FrameWork/wiki/AI-Assistant
+- Security Model: https://github.com/lysophavin18/My-FrameWork/wiki/Security-Model
+- Operations Runbook: https://github.com/lysophavin18/My-FrameWork/wiki/Operations-Runbook
+- Troubleshooting: https://github.com/lysophavin18/My-FrameWork/wiki/Troubleshooting
+- API Cookbook: https://github.com/lysophavin18/My-FrameWork/wiki/API-Cookbook
 
 ## Contributing
 
