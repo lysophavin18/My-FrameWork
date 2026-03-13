@@ -2,6 +2,8 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl gcc libpq-dev \
     libcairo2 libpango-1.0-0 libpangoft2-1.0-0 libpangocairo-1.0-0 \
