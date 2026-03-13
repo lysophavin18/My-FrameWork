@@ -261,7 +261,7 @@ services:
   # ── VAPT Scanning Tools ────────────────────────────────────
 
   openvas:
-    image: greenbone/openvas-scanner:latest
+    image: immauss/openvas:latest
     profiles: ["core"]
     container_name: expl0v1n-openvas
     restart: unless-stopped
