@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Expl0V1N - Bug Hunting Report</title>
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #0b1220; }
+      h1 { font-size: 20px; margin: 0 0 8px 0; }
+      h2 { font-size: 14px; margin: 18px 0 8px 0; }
+      .meta { font-size: 11px; color: #334155; }
+      .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+      .card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; }
+      .card .k { font-size: 10px; color: #64748b; text-transform: uppercase; }
+      .card .v { font-size: 16px; font-weight: 700; }
+      .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; color: #fff; }
+      .sev-critical { background: #b91c1c; }
+      .sev-high { background: #dc2626; }
+      .sev-medium { background: #f59e0b; }
+      .sev-low { background: #2563eb; }
+      .sev-info { background: #64748b; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { border-bottom: 1px solid #e2e8f0; padding: 8px 6px; vertical-align: top; }
+      th { text-align: left; font-size: 11px; color: #334155; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 10px; }
+    </style>
+  </head>
+  <body>
+    <h1>Expl0V1N - Bug Hunting Report</h1>
+    <div class="meta">
+      <div><b>Session ID:</b> {{ session.id }}</div>
+      <div><b>Root domain:</b> <span class="mono">{{ session.root_domain }}</span></div>
+      <div><b>Status:</b> {{ session.status }}</div>
+      <div><b>Preset:</b> {{ session.preset or "" }}</div>
+      {% if session.started_at %}<div><b>Started:</b> {{ session.started_at }}</div>{% endif %}
+      {% if session.completed_at %}<div><b>Completed:</b> {{ session.completed_at }}</div>{% endif %}
+    </div>
+
+    <div class="grid">
+      <div class="card"><div class="k">Subdomains</div><div class="v">{{ subdomains|length }}</div></div>
+      <div class="card"><div class="k">Live Hosts</div><div class="v">{{ live_hosts|length }}</div></div>
+      <div class="card"><div class="k">URLs</div><div class="v">{{ urls|length }}</div></div>
+      <div class="card"><div class="k">Findings</div><div class="v">{{ findings|length }}</div></div>
+    </div>
+
+    <h2>Findings ({{ findings | length }})</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 90px;">Severity</th>
+          <th>Title</th>
+          <th style="width: 110px;">Tool</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in findings %}
+          <tr>
+            <td><span class="badge sev-{{ f.severity }}">{{ f.severity }}</span></td>
+            <td>
+              <b>{{ f.title }}</b>
+              {% if f.template_id %}<div class="meta">Template: <span class="mono">{{ f.template_id }}</span></div>{% endif %}
+              {% if f.cve_id %}<div class="meta">CVE: <span class="mono">{{ f.cve_id }}</span></div>{% endif %}
+            </td>
+            <td class="mono">{{ f.tool }}</td>
+            <td class="mono">{{ f.url or "" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
+

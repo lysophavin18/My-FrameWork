@@ -1,0 +1,1 @@
+FROM golang:1.22-alpine`nRUN go install github.com/BishopFox/jsluice/cmd/jsluice@latest`nENV PATH="/go/bin:${PATH}"`nCMD ["tail","-f","/dev/null"]`n

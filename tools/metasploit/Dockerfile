@@ -1,0 +1,1 @@
+FROM metasploitframework/metasploit-framework:latest`nCMD ["tail","-f","/dev/null"]`n

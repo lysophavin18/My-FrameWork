@@ -1,0 +1,1 @@
+FROM python:3.11-slim`nRUN pip install --no-cache-dir altdns dnsgen gotator`nCMD ["tail","-f","/dev/null"]`n
