@@ -1,7 +1,6 @@
 # Expl0V1N Framework
 
-(docs/assets/logo-placeholder.svg)
-
+![Logo Placeholder](docs/assets/logo-placeholder.svg
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue?logo=docker)](https://docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/Build-Production%20Ready-brightgreen)](#)
@@ -90,6 +89,4 @@ API (direct): http://127.0.0.1:8000/api/v1
 
 See docs/CONTRIBUTING.md.
 
-## License
 
-MIT (see LICENSE).
