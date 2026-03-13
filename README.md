@@ -72,6 +72,20 @@ API (direct): http://127.0.0.1:8000/api/v1
 - Production Checklist: docs/PRODUCTION_CHECKLIST.md
 - Contributing: docs/CONTRIBUTING.md
 
+## Wiki
+
+- Home: wiki/Home.md
+- Platform Overview: wiki/Platform-Overview.md
+- Deployment Guide: wiki/Deployment-Guide.md
+- VAPT Mode: wiki/VAPT-Mode.md
+- Bug Hunting Mode: wiki/Bug-Hunting-Mode.md
+- Advanced Methods: wiki/Advanced-Methods.md
+- AI Assistant: wiki/AI-Assistant.md
+- Security Model: wiki/Security-Model.md
+- Operations Runbook: wiki/Operations-Runbook.md
+- Troubleshooting: wiki/Troubleshooting.md
+- API Cookbook: wiki/API-Cookbook.md
+
 ## Contributing
 
 See docs/CONTRIBUTING.md.
