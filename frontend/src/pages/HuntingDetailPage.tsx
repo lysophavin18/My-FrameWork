@@ -1,8 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Chip, Paper, Stack, Typography } from "@mui/material";
 import { api } from "../api/client";
 import { useAuth } from "../state/AuthProvider";
+
+function statusChipColor(status: string): "default" | "success" | "warning" | "error" | "info" {
+  if (["completed", "done", "success"].includes(status)) return "success";
+  if (["running", "queued", "pending", "approved"].includes(status)) return "info";
+  if (["pending_approval"].includes(status)) return "warning";
+  if (["failed", "denied", "error"].includes(status)) return "error";
+  return "default";
+}
+
+function severityChipColor(severity: string): "default" | "success" | "warning" | "error" | "info" {
+  if (severity === "critical" || severity === "high") return "error";
+  if (severity === "medium") return "warning";
+  if (severity === "low") return "info";
+  if (severity === "info") return "success";
+  return "default";
+}
 
 export default function HuntingDetailPage() {
   const { sessionId } = useParams();
@@ -37,14 +53,25 @@ export default function HuntingDetailPage() {
         Hunting session #{session.id}
       </Typography>
 
-      <Paper sx={{ p: 2, bgcolor: "#0f172a", mb: 2 }}>
-        <Typography variant="body2">
-          Root domain: <b>{session.root_domain}</b>
-        </Typography>
-        <Typography variant="body2">
-          Status: <b>{session.status}</b> • Progress: <b>{session.progress}%</b> • Step:{" "}
-          {session.current_step ?? "—"}
-        </Typography>
+      <Paper sx={{ p: 2.5, bgcolor: "#0f172a", mb: 2, borderRadius: 3 }}>
+        <Stack direction={{ xs: "column", md: "row" }} spacing={1.5} justifyContent="space-between" sx={{ mb: 1 }}>
+          <Box>
+            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
+              Root domain
+            </Typography>
+            <Typography variant="body1" sx={{ fontWeight: 700 }}>
+              {session.root_domain}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
+              Step: {session.current_step ?? "-"}
+            </Typography>
+          </Box>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Chip size="small" label={String(session.status)} color={statusChipColor(String(session.status))} />
+            <Chip size="small" label={`Progress ${session.progress ?? 0}%`} variant="outlined" />
+          </Stack>
+        </Stack>
+
         {session.status === "pending_approval" && user?.role === "admin" ? (
           <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
             <Button
@@ -68,7 +95,7 @@ export default function HuntingDetailPage() {
             </Button>
           </Box>
         ) : null}
-        <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
+        <Box sx={{ mt: 1.5, display: "flex", gap: 1, flexWrap: "wrap" }}>
           <Button variant="outlined" href={`/api/v1/reports/hunting/${session.id}/pdf`} target="_blank">
             Download PDF
           </Button>
@@ -78,48 +105,72 @@ export default function HuntingDetailPage() {
         </Box>
       </Paper>
 
-      <Paper sx={{ p: 2, bgcolor: "#0f172a", mb: 2 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+      <Paper sx={{ p: 2.5, bgcolor: "#0f172a", mb: 2, borderRadius: 3 }}>
+        <Typography variant="subtitle1" sx={{ mb: 1.25, fontWeight: 700 }}>
           Subdomains ({subdomains.length})
         </Typography>
-        <Box sx={{ maxHeight: 160, overflow: "auto" }}>
+        <Box sx={{ maxHeight: 180, overflow: "auto" }}>
           {subdomains.map((s) => (
-            <Typography key={s.id} variant="body2" sx={{ fontFamily: "monospace" }}>
-              {s.subdomain}
-            </Typography>
+            <Paper
+              key={s.id}
+              variant="outlined"
+              sx={{ p: 1, mb: 0.75, bgcolor: "#0b1324", borderColor: "#1f2a44", fontFamily: "monospace" }}
+            >
+              <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
+                {s.subdomain}
+              </Typography>
+            </Paper>
           ))}
         </Box>
       </Paper>
 
-      <Paper sx={{ p: 2, bgcolor: "#0f172a", mb: 2 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+      <Paper sx={{ p: 2.5, bgcolor: "#0f172a", mb: 2, borderRadius: 3 }}>
+        <Typography variant="subtitle1" sx={{ mb: 1.25, fontWeight: 700 }}>
           Live hosts ({liveHosts.length})
         </Typography>
-        <Box sx={{ maxHeight: 160, overflow: "auto" }}>
+        <Box sx={{ maxHeight: 180, overflow: "auto" }}>
           {liveHosts.map((h) => (
-            <Typography key={h.id} variant="body2" sx={{ fontFamily: "monospace" }}>
-              {h.url} {h.status_code ? `(${h.status_code})` : ""}
-            </Typography>
+            <Paper
+              key={h.id}
+              variant="outlined"
+              sx={{ p: 1, mb: 0.75, bgcolor: "#0b1324", borderColor: "#1f2a44", fontFamily: "monospace" }}
+            >
+              <Typography key={h.id} variant="body2" sx={{ fontFamily: "monospace" }}>
+                {h.url} {h.status_code ? `(${h.status_code})` : ""}
+              </Typography>
+            </Paper>
           ))}
         </Box>
       </Paper>
 
-      <Paper sx={{ p: 2, bgcolor: "#0f172a" }}>
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+      <Paper sx={{ p: 2.5, bgcolor: "#0f172a", borderRadius: 3 }}>
+        <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 700 }}>
           Findings ({findings.length})
         </Typography>
-        {findings.map((f) => (
-          <Box key={f.id} sx={{ py: 1, borderBottom: "1px solid #1f2a44" }}>
-            <Typography variant="body2">
-              [{f.severity}] {f.title} <span style={{ color: "#94a3b8" }}>({f.tool})</span>
-            </Typography>
-            {f.url ? (
-              <Typography variant="caption" sx={{ color: "#94a3b8" }}>
-                {f.url}
-              </Typography>
-            ) : null}
-          </Box>
-        ))}
+        <Stack spacing={1.25}>
+          {findings.map((f) => (
+            <Paper key={f.id} variant="outlined" sx={{ p: 1.25, bgcolor: "#0b1324", borderColor: "#1f2a44" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1, flexWrap: "wrap" }}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  {f.title}
+                </Typography>
+                <Stack direction="row" spacing={0.75}>
+                  <Chip
+                    size="small"
+                    label={String(f.severity ?? "unknown")}
+                    color={severityChipColor(String(f.severity ?? ""))}
+                  />
+                  <Chip size="small" label={String(f.tool ?? "tool")} variant="outlined" />
+                </Stack>
+              </Box>
+              {f.url ? (
+                <Typography variant="caption" sx={{ color: "#94a3b8" }}>
+                  {f.url}
+                </Typography>
+              ) : null}
+            </Paper>
+          ))}
+        </Stack>
       </Paper>
     </Box>
   );
